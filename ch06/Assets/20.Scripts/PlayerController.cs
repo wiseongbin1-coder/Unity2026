@@ -1,8 +1,8 @@
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public class PlayerController : MonoBehaviour
 {
-    float jumpForce = 50f;
+    float jumpForce = 200f;
     public float walkForce = 7f;
     float maxWalkSpeed = 1f;
     Animator anim;
@@ -27,7 +27,8 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButton(0) &&
+            rb.linearVelocityY == 0)
         {
             rb.AddForce(transform.up * jumpForce);
         }
@@ -43,6 +44,10 @@ public class PlayerController : MonoBehaviour
         {
             anim.SetBool("IsJumping", true);
         }
+        else if(rb.linearVelocityY == 0)
+        {
+            anim.SetBool("IsJumping", false);
+        }
         if (time > animationPerio)
             sr.sprite = walkSprites[idx];
         idx++;
@@ -50,12 +55,18 @@ public class PlayerController : MonoBehaviour
         {
             idx = 0;
         }
-   }
-            private void OnCollisionEnter(Collision collision)
-            {
-                Debug.Log("성공");
-            }
+        if(transform.position.y < -8)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        SceneManager.LoadScene("ClearScene");
+        Debug.Log("성공");
+    }
 }
+
     
 
 
