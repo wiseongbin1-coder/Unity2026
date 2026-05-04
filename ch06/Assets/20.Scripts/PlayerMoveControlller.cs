@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-public class PlayerController : MonoBehaviour
+
+public class PlayerMoveControlller : MonoBehaviour
 {
     float jumpForce = 200f;
     public float walkForce = 7f;
@@ -10,8 +11,10 @@ public class PlayerController : MonoBehaviour
     public Sprite[] walkSprites;
     public Sprite jumpSprites;
     public float animationPerio = 0.2f;
+    int key;
     float time = 0;
     int idx = 0;
+
     SpriteRenderer sr;
 
     Rigidbody2D rb;
@@ -27,6 +30,21 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        key = 0;
+        if(Input.GetKey(KeyCode.RightArrow))
+        {
+            key = 1;
+        }
+        else if(Input.GetKey(KeyCode.LeftArrow))
+        {
+            key = -1;
+        }
+
+        if(key != 0)
+        {
+            transform.localScale = new Vector3(key, 1, 1);
+        }
+
         if (Input.GetMouseButton(0) &&
             rb.linearVelocityY == 0)
         {
@@ -35,7 +53,7 @@ public class PlayerController : MonoBehaviour
 
         if (rb.linearVelocityX < maxWalkSpeed)
         {
-            rb.AddForce(transform.right * walkForce);
+            rb.AddForce(transform.right * walkForce * key);
         }
 
         time += Time.deltaTime;
@@ -44,20 +62,18 @@ public class PlayerController : MonoBehaviour
         {
             anim.SetBool("IsJumping", true);
         }
-        else //if(rb.linearVelocityY == 0)
+        else if (rb.linearVelocityY == 0)
         {
             anim.SetBool("IsJumping", false);
         }
-        if (time > animationPerio)
-            sr.sprite = walkSprites[idx];
-        idx++;
-        if (idx == walkSprites.Length)
-        {
-            idx = 0;
-        }
-
-        anim.speed = rb.linearVelocityX;
-        if(transform.position.y < -8)
+        //if (time > animationPerio)
+          //  sr.sprite = walkSprites[idx];
+        //idx++;
+        //if (idx == walkSprites.Length)
+        //{
+          //  idx = 0;
+        //}
+        if (transform.position.y < -8)
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
@@ -69,7 +85,7 @@ public class PlayerController : MonoBehaviour
     }
 }
 
-    
+
 
 
 
