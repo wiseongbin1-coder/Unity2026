@@ -33,7 +33,6 @@ public class GameDirector : MonoBehaviour
         time -= Time.deltaTime;
         timeText.GetComponent<TextMeshProUGUI>().text =
            "Time : " +  time.ToString("F1");
-
         pointText.GetComponent<TextMeshProUGUI>().text =
            "Point : " + point;
     }

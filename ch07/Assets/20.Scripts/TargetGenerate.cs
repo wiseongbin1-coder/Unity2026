@@ -29,3 +29,6 @@ public class TargetGenerate : MonoBehaviour
         target.transform.SetParent(transform);
     }
 }
+
+
+
